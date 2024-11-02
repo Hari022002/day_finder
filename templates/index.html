@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day Finder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class=".bg-info">
+    <div class="container mt-5 border border-success border-5" style="width: 35%;">
+        <h2 class="text-center mb-4">Day Finder</h2>
+        <form id="dateForm" class="bg-white p-4 shadow-sm rounded">
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="number" class="form-control" id="date" min="1" max="31" required>
+            </div>
+            <div class="mb-3">
+                <label for="month" class="form-label">Month</label>
+                <input type="number" class="form-control" id="month" min="1" max="12" required>
+            </div>
+            <div class="mb-3">
+                <label for="year" class="form-label">Year</label>
+                <input type="number" class="form-control" id="year" min="1000" required>
+            </div>
+            <button type="button" class="btn btn-success" onclick="getDay()">Submit</button>
+        </form>
+        <div class="mt-3 text-center" id="result"></div>
+    </div>
+
+    <script>
+        function getDay() {
+            const date = document.getElementById("date").value;
+            const month = document.getElementById("month").value;
+            const year = document.getElementById("year").value;
+
+            fetch("/get_day", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ date, month, year }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerHTML = `<div class="alert alert-info">${data.message}</div>`;
+            });
+        }
+    </script>
+</body>
+</html>
